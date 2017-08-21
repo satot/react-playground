@@ -4,33 +4,21 @@ import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
-import {
-    BrowserRouter as Router,
-    Route,
-    Link
-} from 'react-router-dom';
 
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
-import App, {About} from './components/App.js';
+import App from './containers/app';
+import reducer from './reducer';
 
-const Header = () => (
-    <Router>
-        <div>
-            <ul>
-                <li><Link to="/">HOME</Link></li>
-                <li><Link to="/about">About</Link></li>
-            </ul>
-            <hr />
-            <Route exact={true} path="/" component={App} />
-            <Route path="/about" component={About} />
-        </div>
-    </Router>
-);
+const store = createStore(reducer);
 
 ReactDOM.render((
-    <MuiThemeProvider>
-        <Header />
-    </MuiThemeProvider>
+    <Provider store={store}>
+        <MuiThemeProvider>
+            <App />
+        </MuiThemeProvider>
+    </Provider>
 ),
 document.getElementById('content')
 );
