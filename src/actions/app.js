@@ -1,29 +1,86 @@
-export function increment() {
-    return {
-        type: 'INCREMENT',
-        value: 'Tired'
+export function getResourcesByFolderAsync(id) {
+    return dispatch => {
+        setTimeout(() => {
+            dispatch(getResourcesByFolder(id));
+        }, 100);
     };
 }
-export function textUpdate(text) {
+
+export function getResourcesByFolder(id) {
     return {
-        type: 'TEXT_UPDATE',
-        text: text
+        type: 'GET_RESOURCES',
+        files: listResourcesByFolder(id)
     };
 }
-export function setWebSocket(websocket) {
-    return {
-        type: 'SET_WEBSOCKET',
-        ws: websocket
+
+export function getResourcesAsync() {
+    return dispatch => {
+        setTimeout(() => {
+            dispatch(getResources());
+        }, 100);
     };
 }
-export function messageUpdate(msg) {
+
+export function getResources() {
     return {
-        type: 'MSG_UPDATE',
-        message: msg
+        type: 'GET_RESOURCES',
+        files: listResources
     };
 }
-export function requestClose() {
+
+const listResources = {
+    user_id: '12345',
+    user_first_name: 'Sexy',
+    user_last_name: 'Lexy',
+    folders: [
+        {
+            id: '10001',
+            files_count: 1,
+            name: 'Folder 1',
+            description: 'This folder is awesome!',
+            created_at: '2017-07-05 09:35:40',
+            updated_at: '2017-07-05 09:35:40'
+        },
+        {
+            id: '10002',
+            files_count: 2,
+            name: 'Folder 2',
+            description: 'This folder is great!',
+            created_at: '2017-07-05 09:35:40',
+            updated_at: '2017-07-05 09:35:40'
+        }
+    ],
+    documents: [
+        {
+            id: '20001',
+            name: 'Document 1',
+            content: 'I am Document 1',
+            created_at: '2017-07-05 09:35:40',
+            updated_at: '2017-07-05 09:35:40',
+            tags: [{ id: '300001', name: 'tag 1' } ]
+        }
+    ]
+};
+
+function listResourcesByFolder(id) {
     return {
-        type: 'REQUEST_CLOSE'
+        id: id,
+        files_count: 1,
+        name: 'Folder 1',
+        description: 'This folder is awesome!',
+        created_at: '2017-07-05 09:35:40',
+        updated_at: '2017-07-05 09:35:40',
+        documents: [
+            {
+                id: '10001',
+                name: ['Document', id.toString()].join(' '),
+                content: 'I am Document 1',
+                created_at: '2017-07-05 09:35:40',
+                updated_at: '2017-07-05 09:35:40',
+                tags: [
+                    { id: '100001', 'name': 'tag 1' }
+                ]
+            }
+        ]
     };
 }

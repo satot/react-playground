@@ -1,37 +1,17 @@
 const initialState = {
-    ws: null,
-    message: '',
-    open: false,
-    value: '',
-    num: 1,
-    label: 'Photos'
+    files: {}
 };
 
+
 export default function reducer(state = initialState, action) {
+    function assign(newState) {
+        return Object.assign({}, state, newState);
+    }
     switch(action.type) {
-    case 'INCREMENT':
-        return Object.assign({}, state, {
-            num: state.num + 1,
-            value: action.value
-        });
-    case 'TEXT_UPDATE':
-        return Object.assign({}, state, {
-            value: action.text
-        });
-    case 'SET_WEBSOCKET':
-        return Object.assign({}, state, {
-            ws: action.ws
-        });
-    case 'MSG_UPDATE':
-        return Object.assign({}, state, {
-            open: true,
-            message: action.message
-        });
-    case 'REQUEST_CLOSE':
-        return Object.assign({}, state, {
-            open: false
-        });
+    case 'GET_RESOURCES':
+        return assign({ files: action.files});
     default:
         return state;
     }
 }
+
