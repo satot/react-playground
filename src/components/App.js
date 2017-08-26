@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
 import List, { ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import FileFolder from 'material-ui/svg-icons/file/folder';
@@ -12,7 +14,12 @@ export default class App extends React.Component {
     }
 
     componentWillMount () {
-        this.props.getResourcesAsync();
+        let params = this.props.match.params;
+        if(params && params.folderId) {
+            this.props.getResourcesByFolderAsync(params.folderId);
+        } else {
+            this.props.getResourcesAsync();
+        }
     }
 
     render () {
@@ -52,11 +59,13 @@ class Folder extends React.Component {
     }
 
     render() {
+        let linkTo = '/' + this.props.id.toString();
         return (
             <ListItem
                 key={this.props.id}
                 leftAvatar={<Avatar icon={<FileFolder />} />}
                 onTouchTap={this.handleTouchTap.bind(this, this.props.id)}
+                containerElement={<Link to={linkTo} />}
                 primaryText={this.props.name}
                 secondaryText={this.props.description}
             />
