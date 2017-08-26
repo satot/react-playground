@@ -8,6 +8,8 @@ injectTapEventPlugin();
 import configureStore from './store';
 import { Provider } from 'react-redux';
 
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
 import App from './containers/app';
 
 const store = configureStore();
@@ -15,7 +17,12 @@ const store = configureStore();
 ReactDOM.render((
     <Provider store={store}>
         <MuiThemeProvider>
-            <App />
+            <Router>
+                <div>
+                    <Route exact={true} path='/' component={App} />
+                    <Route path='/:folderId' component={App} />
+                </div>
+            </Router>
         </MuiThemeProvider>
     </Provider>
 ),
