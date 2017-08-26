@@ -9,15 +9,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        handleClick: () => { dispatch(actions.increment()); },
-        handleTextChange: (text) => { dispatch(actions.textUpdate(text)); },
-        handleWebSocket: (websocket) => {
-            dispatch(actions.setWebSocket(websocket));
-        },
-        handleMessageChange: (msg) => {
-            dispatch(actions.messageUpdate(msg));
-        },
-        handleRequestClose: () => {dispatch(actions.requestClose());}
+        getResourcesAsync: () => {dispatch(actions.getResourcesAsync());},
+        getResourcesByFolderAsync: (id) => {
+            dispatch(actions.getResourcesByFolderAsync(id));
+        }
     };
 }
 

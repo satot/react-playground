@@ -1,73 +1,85 @@
 import React from 'react';
 
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import Snackbar from 'material-ui/Snackbar';
 import List, { ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import FileFolder from 'material-ui/svg-icons/file/folder';
+import DocumentIcon from 'material-ui/svg-icons/editor/insert-drive-file';
+import {blue500} from 'material-ui/styles/colors';
 
 export default class App extends React.Component {
     constructor (props) {
         super(props);
     }
 
-    handleTouchTap () {
-        this.props.ws.send(this.props.value);
-    }
-
-    handleRequestClose () {
-        this.props.handleRequestClose();
-    }
-
-    handleChange (e) {
-        this.props.handleTextChange(e.target.value);
-    }
-
-    handleMessage (msg) {
-        this.props.handleMessageChange(msg.data);
-    }
-
-    componentDidMount () {
-        var ws = new WebSocket('wss://echo.websocket.org');
-        ws.onmessage = this.handleMessage.bind(this);
-        this.props.handleWebSocket(ws);
-    }
-
-    componentWillUnmount () {
-        this.props.ws.close();
+    componentWillMount () {
+        this.props.getResourcesAsync();
     }
 
     render () {
+        let files = this.props.files;
+        let folders = (files && files.folders) ? files.folders.map((f) => {
+            return (
+                <Folder
+                    key={'f' + f.id.toString()}
+                    id={f.id}
+                    name={f.name}
+                    description={f.description}
+                    handleTouch={this.props.getResourcesByFolderAsync}
+                />
+            );
+        }) : null;
+        let documents = (files && files.documents) ? files.documents.map((d) => {
+            return (
+                <Document
+                    key={'d' + d.id.toString()}
+                    id={d.id}
+                    name={d.name}
+                    updated_at={d.updated_at}
+                />
+            );
+        }) : null;
         return (
             <div>
-                <TextField
-                    hintText="message"
-                    value={this.props.value}
-                    onChange={e => this.handleChange(e)}
-                />
-                <RaisedButton
-                    onTouchTap={this.handleTouchTap.bind(this)}
-                    label="SUBMIT"
-                />
-                <List>
-                    <ListItem
-                        leftAvatar={<Avatar icon={<FileFolder />} />}
-                        primaryText={this.props.label}
-                        secondaryText={this.props.value}
-                    />
-                </List>
-                <Snackbar
-                    open={this.props.open}
-                    message={this.props.message}
-                    autoHideDuration={2000}
-                    onRequestClose={this.handleRequestClose.bind(this)}
-                />
-                <span>{this.props.num}</span>
-                <button onClick={() => this.props.handleClick()}>incre</button>
+                <List>{folders} {documents}</List>
             </div>
         );
     }
+}
+
+class Folder extends React.Component {
+    handleTouchTap (folderId) {
+        this.props.handleTouch(folderId);
+    }
+
+    render() {
+        return (
+            <ListItem
+                key={this.props.id}
+                leftAvatar={<Avatar icon={<FileFolder />} />}
+                onTouchTap={this.handleTouchTap.bind(this, this.props.id)}
+                primaryText={this.props.name}
+                secondaryText={this.props.description}
+            />
+        );
+    }
+}
+
+class Document extends React.Component {
+    render() {
+        let updt = new Date(this.props.updated_at);
+        return (
+            <ListItem
+                key={this.props.id}
+                leftAvatar={<Avatar icon={<DocumentIcon />} backgroundColor={blue500} />}
+                primaryText={this.props.name}
+                secondaryText={dtFormat(updt.getFullYear(), updt.getMonth(), updt.getDate())}
+            />
+        );
+    }
+}
+
+function dtFormat (year, month, date) {
+    return [date, month, year].join('/');
 }
 
 export const About = () => (
