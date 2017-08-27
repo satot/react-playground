@@ -2,9 +2,11 @@ import { connect } from 'react-redux';
 
 import App from '../components/App';
 import * as actions from '../actions/app';
+import rootSelector from '../selectors';
 
 function mapStateToProps(state) {
-    return state;
+    const validation = rootSelector(state);
+    return Object.assign({}, state, {validation: validation});
 }
 
 function mapDispatchToProps(dispatch) {

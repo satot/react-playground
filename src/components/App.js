@@ -13,6 +13,8 @@ import DocumentIcon from 'material-ui/svg-icons/editor/insert-drive-file';
 import MoreVert from 'material-ui/svg-icons/navigation/more-vert';
 import { transparent, blue500, grey400 } from 'material-ui/styles/colors';
 
+import { isERROR } from '../constants/validationStatus';
+
 export default class App extends React.Component {
     componentWillMount () {
         // make sure modal is closed when page has been changed
@@ -40,7 +42,15 @@ export default class App extends React.Component {
     }
 
     render () {
-        const {files, file, open, handleOpenModal, handleCloseModal, getResourcesByFolderAsync} = this.props;
+        const {
+            files,
+            file,
+            open,
+            validation,
+            handleOpenModal,
+            handleCloseModal,
+            getResourcesByFolderAsync
+        } = this.props;
         const folders = (files && files.folders) ? files.folders.map((f) => {
             return (
                 <Folder
@@ -73,6 +83,7 @@ export default class App extends React.Component {
             <FlatButton
                 label="Rename"
                 primary={true}
+                disabled={isERROR(validation.name)}
                 onClick={this.handleRenameSubmit.bind(this)}
             />,
         ];
