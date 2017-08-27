@@ -14,10 +14,6 @@ import MoreVert from 'material-ui/svg-icons/navigation/more-vert';
 import { transparent, blue500, grey400 } from 'material-ui/styles/colors';
 
 export default class App extends React.Component {
-    constructor (props) {
-        super(props);
-    }
-
     componentWillMount () {
         // make sure modal is closed when page has been changed
         if (this.props.open) {
@@ -26,7 +22,7 @@ export default class App extends React.Component {
     }
 
     componentDidMount () {
-        let params = this.props.match.params;
+        const params = this.props.match.params;
         if(params && params.folderId) {
             this.props.getResourcesByFolderAsync(params.folderId);
         } else {
@@ -44,35 +40,35 @@ export default class App extends React.Component {
     }
 
     render () {
-        let files = this.props.files;
-        let folders = (files && files.folders) ? files.folders.map((f) => {
+        const {files, file, open, handleOpenModal, handleCloseModal, getResourcesByFolderAsync} = this.props;
+        const folders = (files && files.folders) ? files.folders.map((f) => {
             return (
                 <Folder
                     key={'f' + f.id.toString()}
                     id={f.id}
                     name={f.name}
-                    open={this.props.open}
+                    open={open}
                     description={f.description}
-                    handleTouch={this.props.getResourcesByFolderAsync}
-                    onMenuClick={this.props.handleOpenModal}
+                    handleTouch={getResourcesByFolderAsync}
+                    onMenuClick={handleOpenModal}
                 />
             );
         }) : null;
-        let documents = (files && files.documents) ? files.documents.map((d) => {
+        const documents = (files && files.documents) ? files.documents.map((d) => {
             return (
                 <Document
                     key={'d' + d.id.toString()}
                     id={d.id}
                     name={d.name}
                     updated_at={d.updated_at}
-                    onMenuClick={this.props.handleOpenModal}
+                    onMenuClick={handleOpenModal}
                 />
             );
         }) : null;
         const actions = [
             <FlatButton
                 label="Cancel"
-                onClick={this.props.handleCloseModal}
+                onClick={handleCloseModal}
             />,
             <FlatButton
                 label="Rename"
@@ -87,12 +83,12 @@ export default class App extends React.Component {
                     title="Rename"
                     actions={actions}
                     modal={false}
-                    open={this.props.open}
-                    onRequestClose={this.props.handleCloseModal}
+                    open={open}
+                    onRequestClose={handleCloseModal}
                 >
                     <TextField
                         id="tf1"
-                        value={this.props.file.name}
+                        value={file.name}
                         onChange={this.handleTextFieldChange.bind(this)}
                     />
                 </Dialog>
@@ -115,10 +111,11 @@ class Folder extends React.Component {
     }
 
     render() {
-        let linkTo = '/' + this.props.id.toString();
+        const {id, name, description} = this.props;
+        const linkTo = '/' + id.toString();
         return (
             <ListItem
-                key={this.props.id}
+                key={id}
                 leftAvatar={<Avatar icon={<FileFolder />} />}
                 rightAvatar={
                     <Avatar
@@ -126,14 +123,14 @@ class Folder extends React.Component {
                         backgroundColor={transparent}
                         color={grey400}
                         onClick={this.handleMenu.bind(this)}
-                        data-file-id={this.props.id}
-                        data-file-name={this.props.name}
+                        data-file-id={id}
+                        data-file-name={name}
                     />
                 }
-                onClick={this.handleTouchTap.bind(this, this.props.id)}
+                onClick={this.handleTouchTap.bind(this, id)}
                 containerElement={<Link to={linkTo} />}
-                primaryText={this.props.name}
-                secondaryText={this.props.description}
+                primaryText={name}
+                secondaryText={description}
             />
         );
     }
@@ -149,10 +146,11 @@ class Document extends React.Component {
     }
 
     render() {
-        let updt = new Date(this.props.updated_at);
+        const {id, name, updated_at} = this.props;
+        const updt = new Date(updated_at);
         return (
             <ListItem
-                key={this.props.id}
+                key={id}
                 leftAvatar={<Avatar icon={<DocumentIcon />} backgroundColor={blue500} />}
                 rightAvatar={
                     <Avatar
@@ -160,11 +158,11 @@ class Document extends React.Component {
                         backgroundColor={transparent}
                         color={grey400}
                         onClick={this.handleMenu.bind(this)}
-                        data-file-id={this.props.id}
-                        data-file-name={this.props.name}
+                        data-file-id={id}
+                        data-file-name={name}
                     />
                 }
-                primaryText={this.props.name}
+                primaryText={name}
                 secondaryText={dtFormat(updt.getFullYear(), updt.getMonth(), updt.getDate())}
             />
         );

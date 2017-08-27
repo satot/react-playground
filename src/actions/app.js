@@ -1,26 +1,27 @@
-export function openModal(file) {
+/* globals module: false */
+function openModal(file) {
     return {
         type: 'MODAL_OPEN',
         file: file
     };
 }
 
-export function closeModal() {
+function closeModal() {
     return { type: 'MODAL_CLOSE' };
 }
 
-export function changeName(name) {
+function changeName(name) {
     return {
         type: 'CHANGE_NAME',
         name: name
     };
 }
 
-export function renameSubmit() {
+function renameSubmit() {
     return { type: 'RENAME_SUBMIT' };
 }
 
-export function getResourcesByFolderAsync(id) {
+function getResourcesByFolderAsync(id) {
     return dispatch => {
         setTimeout(() => {
             dispatch(getResourcesByFolder(id));
@@ -28,14 +29,14 @@ export function getResourcesByFolderAsync(id) {
     };
 }
 
-export function getResourcesByFolder(id) {
+function getResourcesByFolder(id) {
     return {
         type: 'GET_RESOURCES',
         files: listResourcesByFolder(id)
     };
 }
 
-export function getResourcesAsync() {
+function getResourcesAsync() {
     return dispatch => {
         setTimeout(() => {
             dispatch(getResources());
@@ -43,7 +44,7 @@ export function getResourcesAsync() {
     };
 }
 
-export function getResources() {
+function getResources() {
     return {
         type: 'GET_RESOURCES',
         files: listResources
@@ -106,3 +107,12 @@ function listResourcesByFolder(id) {
         ]
     };
 }
+
+module.exports = {
+    openModal,
+    closeModal,
+    changeName,
+    renameSubmit,
+    getResourcesByFolderAsync,
+    getResourcesAsync
+};
