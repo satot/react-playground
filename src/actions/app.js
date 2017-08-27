@@ -1,3 +1,25 @@
+export function openModal(file) {
+    return {
+        type: 'MODAL_OPEN',
+        file: file
+    };
+}
+
+export function closeModal() {
+    return { type: 'MODAL_CLOSE' };
+}
+
+export function changeName(name) {
+    return {
+        type: 'CHANGE_NAME',
+        name: name
+    };
+}
+
+export function renameSubmit() {
+    return { type: 'RENAME_SUBMIT' };
+}
+
 export function getResourcesByFolderAsync(id) {
     return dispatch => {
         setTimeout(() => {
@@ -72,7 +94,7 @@ function listResourcesByFolder(id) {
         updated_at: '2017-07-05 09:35:40',
         documents: [
             {
-                id: '10001',
+                id: id,
                 name: ['Document', id.toString()].join(' '),
                 content: 'I am Document 1',
                 created_at: '2017-07-05 09:35:40',

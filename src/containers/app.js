@@ -12,7 +12,11 @@ function mapDispatchToProps(dispatch) {
         getResourcesAsync: () => {dispatch(actions.getResourcesAsync());},
         getResourcesByFolderAsync: (id) => {
             dispatch(actions.getResourcesByFolderAsync(id));
-        }
+        },
+        handleOpenModal: (file) => {dispatch(actions.openModal(file));},
+        handleCloseModal: () => {dispatch(actions.closeModal());},
+        handleChangeName: (name) => {dispatch(actions.changeName(name));},
+        handleRenameSubmit: () => {dispatch(actions.renameSubmit());}
     };
 }
 
